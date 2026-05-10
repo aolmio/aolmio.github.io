@@ -13,7 +13,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -21,15 +20,10 @@
       theme: {
         extend: {
           fontFamily: { sans: ['Inter', 'sans-serif'] },
-          screens: {
-            xs: '380px'
-          },
-          animation: {
-            fade: 'fade .35s ease-out'
-          },
+          animation: { fade: 'fade .35s ease-out' },
           keyframes: {
             fade: {
-              from: { opacity: 0, transform: 'translateY(8px)' },
+              from: { opacity: 0, transform: 'translateY(12px)' },
               to: { opacity: 1, transform: 'translateY(0)' }
             }
           }
@@ -42,218 +36,212 @@
 
   <style>
     :root { color-scheme: light dark; }
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    html { font-size: clamp(14px, 1vw + 12px, 18px); }
-    body { font-family: Inter, sans-serif; }
-
-    .line-clamp-3 {
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
+    body { font-family: Inter, sans-serif; -webkit-font-smoothing: antialiased; }
+    
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { 
+      background: #475569; 
+      border-radius: 10px; 
+      border: 3px solid transparent; 
+      background-clip: content-box;
     }
 
-    ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-thumb { background: #475569; border-radius: 999px; }
+    .glass-nav {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .dark .glass-nav {
+      background: rgba(13, 17, 23, 0.7);
+    }
 
     @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation: none !important;
-        transition: none !important;
-      }
-      html { scroll-behavior: auto; }
+      * { animation: none !important; transition: none !important; }
     }
   </style>
 </head>
 
-<body class="bg-slate-50 text-slate-900 dark:bg-[#0d1117] dark:text-slate-200 min-h-screen selection:bg-blue-200 dark:selection:bg-blue-900">
+<body class="bg-slate-50 text-slate-900 dark:bg-[#0d1117] dark:text-slate-200 min-h-screen selection:bg-blue-500/30">
 
-  <!-- Floating Theme Toggle -->
-  <button id="themeToggle" aria-label="Toggle theme"
-    class="fixed top-4 right-4 sm:top-5 sm:right-5 z-50 rounded-full p-3 bg-white/80 dark:bg-slate-900/80 backdrop-blur border border-slate-200 dark:border-slate-700 shadow-lg hover:scale-105 transition">
-    <i data-lucide="moon" class="w-4 h-4"></i>
-  </button>
+  <!-- Header & Search -->
+  <nav class="sticky top-0 z-40 glass-nav border-b border-slate-200 dark:border-slate-800 transition-colors">
+    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+      <span class="font-bold text-xl tracking-tight bg-gradient-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent">aolmio</span>
+      
+      <div class="flex items-center gap-4">
+        <div class="relative hidden sm:block">
+          <input id="searchInput" type="search" placeholder="Search projects..." 
+            class="w-64 px-4 py-1.5 text-sm rounded-full border border-slate-300 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50 outline-none focus:ring-2 focus:ring-blue-500 transition-all" />
+        </div>
+        <button id="themeToggle" aria-label="Toggle theme" class="p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
+          <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+          <i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
 
-  <!-- Header -->
-  <header class="max-w-7xl mx-auto px-4 sm:px-6 pt-16 sm:pt-20 pb-10 sm:pb-14 text-center animate-fade">
-    <h1 class="text-4xl xs:text-5xl md:text-6xl font-extrabold tracking-tight mb-4 bg-gradient-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent break-words">
-      aolmio
-    </h1>
-
-    <p class="text-sm xs:text-base md:text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto px-2">
-my Vibes    </p>
-
-    <div class="mt-6 sm:mt-8 max-w-md mx-auto px-1">
-      <input
-        id="searchInput"
-        type="search"
-        placeholder="Filter projects..."
-        class="w-full px-4 py-3 text-sm sm:text-base rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 outline-none focus:ring-2 focus:ring-blue-500"
-      />
+  <!-- Hero Section -->
+  <header class="max-w-4xl mx-auto px-6 py-16 text-center animate-fade">
+    <h1 class="text-5xl md:text-7xl font-black mb-6 tracking-tighter">Building things for the <span class="text-blue-600">web.</span></h1>
+    <p class="text-lg text-slate-600 dark:text-slate-400">Software developer exploring the intersection of design and performance.</p>
+    
+    <!-- Mobile Search -->
+    <div class="mt-8 sm:hidden">
+      <input id="searchInputMobile" type="search" placeholder="Search projects..." 
+        class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 outline-none focus:ring-2 focus:ring-blue-500" />
     </div>
   </header>
 
-  <!-- Main -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 pb-20 sm:pb-24">
-    <div id="repo-container"
-      class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6"
-      aria-live="polite">
+  <!-- Main Grid -->
+  <main class="max-w-7xl mx-auto px-6 pb-24">
+    <div id="repo-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" aria-live="polite">
+      <!-- Content injected by JS -->
     </div>
   </main>
 
-  <!-- Skeleton -->
+  <!-- Templates -->
   <template id="skeleton-template">
-    <div class="animate-pulse bg-white dark:bg-[#161b22] border border-slate-200 dark:border-slate-800 rounded-2xl p-5 h-52">
-      <div class="h-4 w-20 bg-slate-200 dark:bg-slate-700 rounded mb-4"></div>
-      <div class="h-6 w-3/4 bg-slate-200 dark:bg-slate-700 rounded mb-3"></div>
-      <div class="h-4 w-full bg-slate-200 dark:bg-slate-700 rounded mb-2"></div>
-      <div class="h-4 w-2/3 bg-slate-200 dark:bg-slate-700 rounded"></div>
+    <div class="animate-pulse bg-white dark:bg-[#161b22] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 h-56">
+      <div class="flex justify-between mb-4">
+        <div class="h-4 w-16 bg-slate-200 dark:bg-slate-700 rounded"></div>
+        <div class="h-4 w-4 bg-slate-200 dark:bg-slate-700 rounded-full"></div>
+      </div>
+      <div class="h-6 w-3/4 bg-slate-200 dark:bg-slate-700 rounded mb-4"></div>
+      <div class="space-y-2">
+        <div class="h-3 w-full bg-slate-200 dark:bg-slate-700 rounded"></div>
+        <div class="h-3 w-5/6 bg-slate-200 dark:bg-slate-700 rounded"></div>
+      </div>
     </div>
   </template>
 
-  <!-- Card -->
   <template id="card-template">
-    <article class="group bg-white dark:bg-[#161b22] border border-slate-200 dark:border-slate-800 rounded-2xl p-5 sm:p-6 flex flex-col shadow-sm hover:shadow-2xl hover:-translate-y-1 transition duration-300 animate-fade min-h-[230px]">
-      <div class="flex-grow">
-        <div class="flex justify-between items-start mb-3 gap-2">
-          <span class="language-tag text-[10px] uppercase tracking-widest font-bold px-2 py-1 rounded-md bg-slate-100 dark:bg-slate-800 truncate max-w-[70%]"></span>
-          <i data-lucide="github" class="w-4 h-4 text-slate-400 shrink-0"></i>
-        </div>
-
-        <h2 class="repo-name text-lg sm:text-xl font-semibold mb-2 group-hover:text-blue-500 transition-colors break-words"></h2>
-
-        <p class="repo-desc text-sm text-slate-500 dark:text-slate-400 line-clamp-3 mb-6"></p>
+    <article class="group flex flex-col bg-white dark:bg-[#161b22] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 hover:shadow-xl hover:border-blue-500/50 transition-all duration-300 animate-fade">
+      <div class="flex justify-between items-start mb-4">
+        <span class="language-tag text-[10px] uppercase font-bold tracking-widest px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400"></span>
+        <i data-lucide="github" class="w-5 h-5 text-slate-400"></i>
       </div>
+      
+      <h2 class="repo-name text-xl font-bold mb-2 group-hover:text-blue-500 transition-colors"></h2>
+      <p class="repo-desc text-sm text-slate-500 dark:text-slate-400 line-clamp-3 flex-grow mb-6"></p>
 
       <div class="grid grid-cols-2 gap-3 mt-auto">
-        <a class="repo-code-link text-center text-xs sm:text-sm font-semibold py-3 rounded-xl border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800">
+        <a class="repo-code-link flex items-center justify-center gap-2 text-xs font-bold py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
           Source
         </a>
-        <a class="repo-live-link text-center text-xs sm:text-sm font-semibold py-3 rounded-xl bg-blue-600 text-white hover:bg-blue-700">
-          Live Demo
+        <a class="repo-live-link flex items-center justify-center gap-2 text-xs font-bold py-2.5 rounded-lg bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:opacity-90 transition-opacity">
+          View Demo
         </a>
       </div>
     </article>
   </template>
 
   <script>
-    const username = 'aolmio';
-    const API = `https://api.github.com/users/${username}/repos?sort=updated&per_page=100`;
-    const CACHE_KEY = `repos_${username}_v3`;
-    const CACHE_TTL = 1000 * 60 * 10;
-
-    const container = document.getElementById('repo-container');
-    const cardTemplate = document.getElementById('card-template');
-    const skeletonTemplate = document.getElementById('skeleton-template');
-    const searchInput = document.getElementById('searchInput');
-    const themeToggle = document.getElementById('themeToggle');
-    let allRepos = [];
-
-    function initTheme() {
-      const saved = localStorage.getItem('theme');
-      const dark = saved ? saved === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
-      document.documentElement.classList.toggle('dark', dark);
-    }
-
-    themeToggle.onclick = () => {
-      const dark = document.documentElement.classList.toggle('dark');
-      localStorage.setItem('theme', dark ? 'dark' : 'light');
+    const CONFIG = {
+      username: 'aolmio',
+      cacheKey: 'repos_aolmio_v4',
+      ttl: 1000 * 60 * 15 // 15 mins
     };
 
-    function showSkeletons(n = window.innerWidth < 640 ? 3 : 6) {
-      container.innerHTML = '';
-      for (let i = 0; i < n; i++) {
-        container.appendChild(skeletonTemplate.content.cloneNode(true));
-      }
+    let allRepos = [];
+    const container = document.getElementById('repo-container');
+    const searchInputs = [document.getElementById('searchInput'), document.getElementById('searchInputMobile')];
+
+    // Initialize Theme
+    function initTheme() {
+      const isDark = localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      document.documentElement.classList.toggle('dark', isDark);
     }
 
-    function safeURL(url, fallback = '#') {
-      try { return new URL(url).href; }
-      catch { return fallback; }
+    document.getElementById('themeToggle').onclick = () => {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.theme = isDark ? 'dark' : 'light';
+    };
+
+    function showSkeletons() {
+      container.innerHTML = Array(6).fill('').map(() => document.getElementById('skeleton-template').innerHTML).join('');
     }
 
     function render(repos) {
       container.innerHTML = '';
-
       if (!repos.length) {
-        container.innerHTML = '<p class="col-span-full text-center text-slate-500 py-12">No matching projects.</p>';
+        container.innerHTML = `<div class="col-span-full py-20 text-center text-slate-500">No projects found matching that criteria.</div>`;
         return;
       }
 
       const fragment = document.createDocumentFragment();
+      const template = document.getElementById('card-template');
 
       repos.forEach(repo => {
-        if (repo.name.toLowerCase() === `${username}.github.io`) return;
+        if (repo.name.toLowerCase() === `${CONFIG.username}.github.io`) return;
 
-        const clone = cardTemplate.content.cloneNode(true);
-
+        const clone = template.content.cloneNode(true);
         clone.querySelector('.language-tag').textContent = repo.language || 'Project';
         clone.querySelector('.repo-name').textContent = repo.name.replace(/[-_]/g, ' ');
-        clone.querySelector('.repo-desc').textContent = repo.description || 'A unique project exploring code and creativity.';
+        clone.querySelector('.repo-desc').textContent = repo.description || 'Exploring development through creative problem solving.';
+        
+        const codeLink = clone.querySelector('.repo-code-link');
+        codeLink.href = repo.html_url;
+        codeLink.target = '_blank';
 
-        const code = clone.querySelector('.repo-code-link');
-        code.href = safeURL(repo.html_url);
-        code.target = '_blank';
-        code.rel = 'noopener noreferrer';
-
-        const live = clone.querySelector('.repo-live-link');
-        live.href = safeURL(repo.homepage || `https://${username}.github.io/${repo.name}/`);
-        live.target = '_blank';
-        live.rel = 'noopener noreferrer';
+        const liveLink = clone.querySelector('.repo-live-link');
+        liveLink.href = repo.homepage || `https://${CONFIG.username}.github.io/${repo.name}/`;
+        liveLink.target = '_blank';
 
         fragment.appendChild(clone);
       });
 
       container.appendChild(fragment);
-      window.lucide?.createIcons();
+      if (window.lucide) lucide.createIcons();
     }
 
-    async function fetchRepos() {
+    async function fetchData() {
       showSkeletons();
-
-      const cached = localStorage.getItem(CACHE_KEY);
+      
+      const cached = localStorage.getItem(CONFIG.cacheKey);
       if (cached) {
-        const parsed = JSON.parse(cached);
-        if (Date.now() - parsed.time < CACHE_TTL) {
-          allRepos = parsed.data;
+        const { data, time } = JSON.parse(cached);
+        if (Date.now() - time < CONFIG.ttl) {
+          allRepos = data;
           render(allRepos);
+          // Return early but still fetch in background to refresh cache (SWR pattern)
         }
       }
 
       try {
-        const controller = new AbortController();
-        setTimeout(() => controller.abort(), 8000);
-
-        const res = await fetch(API, {
-          signal: controller.signal,
-          headers: { Accept: 'application/vnd.github+json' }
-        });
-
-        if (!res.ok) throw new Error();
-
+        const res = await fetch(`https://api.github.com/users/${CONFIG.username}/repos?sort=updated&per_page=100`);
+        if (!res.ok) throw new Error('API Error');
         allRepos = await res.json();
-        localStorage.setItem(CACHE_KEY, JSON.stringify({ time: Date.now(), data: allRepos }));
+        localStorage.setItem(CONFIG.cacheKey, JSON.stringify({ data: allRepos, time: Date.now() }));
         render(allRepos);
-      } catch {
+      } catch (err) {
         if (!allRepos.length) {
-          container.innerHTML = '<p class="col-span-full text-center text-red-500 py-12">Failed to load repositories.</p>';
+          container.innerHTML = `<p class="col-span-full text-center text-red-500 py-12">Failed to sync with GitHub. Please try again later.</p>`;
         }
       }
     }
 
-    searchInput.addEventListener('input', e => {
-      const q = e.target.value.toLowerCase().trim();
-      render(allRepos.filter(r =>
-        r.name.toLowerCase().includes(q) ||
-        (r.description || '').toLowerCase().includes(q) ||
-        (r.language || '').toLowerCase().includes(q)
-      ));
-    });
+    // Simple Debounce
+    let debounceTimer;
+    const handleSearch = (e) => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        const q = e.target.value.toLowerCase();
+        const filtered = allRepos.filter(r => 
+          r.name.toLowerCase().includes(q) || 
+          (r.description || '').toLowerCase().includes(q) ||
+          (r.language || '').toLowerCase().includes(q)
+        );
+        render(filtered);
+      }, 200);
+    };
 
-    addEventListener('resize', () => showSkeletons());
+    searchInputs.forEach(input => input.addEventListener('input', handleSearch));
 
     initTheme();
-    fetchRepos();
+    fetchData();
   </script>
 </body>
 </html>
