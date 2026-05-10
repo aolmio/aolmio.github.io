@@ -3,62 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>aolmio's Repos</title>
+    <title>aolmio | Project Portfolio</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; line-height: 1.6; max-width: 900px; margin: 40px auto; padding: 0 20px; background: #f6f8fa; color: #24292e; }
-        h1 { border-bottom: 1px solid #eaecef; padding-bottom: 10px; text-align: center; }
-        .repo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 30px; }
-        .repo-card { background: white; padding: 20px; border: 1px solid #e1e4e8; border-radius: 6px; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s; }
-        .repo-card:hover { transform: translateY(-5px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
-        .repo-card h2 { margin: 0 0 10px 0; font-size: 1.25rem; color: #0366d6; text-transform: capitalize; }
-        .repo-card p { font-size: 0.9rem; color: #586069; flex-grow: 1; margin-bottom: 20px; }
+        :root { --primary: #0366d6; --success: #2ea44f; --bg: #f6f8fa; --text: #24292e; --border: #d1d5da; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; max-width: 1000px; margin: 40px auto; padding: 0 20px; background: var(--bg); color: var(--text); }
+        header { text-align: center; margin-bottom: 50px; }
+        .repo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .repo-card { background: white; padding: 20px; border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; transition: all 0.2s ease-in-out; }
+        .repo-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); border-color: var(--primary); }
+        .repo-card h2 { margin: 0 0 10px 0; font-size: 1.1rem; color: var(--primary); text-transform: lowercase; }
+        .repo-card p { font-size: 0.9rem; color: #586069; flex-grow: 1; margin-bottom: 20px; min-height: 40px; }
+        .tag { font-size: 0.75rem; background: #e1e4e8; padding: 2px 8px; border-radius: 10px; margin-right: 5px; font-weight: 500; }
         .button-group { display: flex; gap: 10px; }
-        .btn { flex: 1; text-align: center; text-decoration: none; font-size: 0.85rem; font-weight: 600; padding: 8px 0; border-radius: 6px; transition: 0.2s; }
-        .btn-github { background: #24292e; color: white; border: 1px solid #1b1f23; }
-        .btn-github:hover { background: #444d56; }
-        .btn-live { background: #2ea44f; color: white; border: 1px solid rgba(27,31,35,0.15); }
-        .btn-live:hover { background: #2c974b; }
+        .btn { flex: 1; text-align: center; text-decoration: none; font-size: 0.8rem; font-weight: 600; padding: 10px 0; border-radius: 6px; }
+        .btn-code { background: #f3f4f6; color: var(--text); border: 1px solid var(--border); }
+        .btn-code:hover { background: #e5e7eb; }
+        .btn-live { background: var(--success); color: white; border: 1px solid rgba(27,31,35,0.15); }
+        .btn-live:hover { opacity: 0.9; }
     </style>
 </head>
 <body>
-    <h1>My Projects</h1>
-    <div id="repo-container" class="repo-grid">Loading your projects...</div>
+
+    <header>
+        <h1>aolmio</h1>
+        <p>Software developer & creator. Exploring new ideas through code.</p>
+    </header>
+
+    <div id="repo-container" class="repo-grid">
+        <!-- Repos will appear here automatically -->
+    </div>
 
     <script>
-        const mySelectedRepos = ['litread', 'dbread', 'oiu', 'akie', 'euid', 'xpc', 'ahdk', '7226', 'a1', 'su', '2512', 'bau'];
         const username = 'aolmio';
+        const container = document.getElementById('repo-container');
 
         async function fetchRepos() {
             try {
-                const response = await fetch(`https://api.github.com/users/${username}/repos?per_page=100`);
+                // Fetches all public repos, sorted by most recently updated
+                const response = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=100`);
                 const repos = await response.json();
-                const container = document.getElementById('repo-container');
+                
                 container.innerHTML = ''; 
 
-                const filtered = repos.filter(repo => mySelectedRepos.includes(repo.name));
+                repos.forEach(repo => {
+                    // 1. Skip the portfolio repo itself so it doesn't show up in the list
+                    if (repo.name.toLowerCase() === `${username}.github.io`.toLowerCase()) return;
 
-                filtered.forEach(repo => {
-                    // Logic to find the live link: 
-                    // 1. Check if 'homepage' is set in GitHub settings.
-                    // 2. If not, guess it's a GitHub Pages site (username.github.io/repo).
+                    // 2. Use the 'homepage' (Website) field if it exists, otherwise use standard GitHub Pages URL
                     const liveLink = repo.homepage || `https://${username}.github.io/${repo.name}/`;
-
+                    
                     const card = document.createElement('div');
                     card.className = 'repo-card';
                     card.innerHTML = `
                         <div>
+                            <span class="tag">${repo.language || 'Code'}</span>
                             <h2>${repo.name}</h2>
-                            <p>${repo.description || 'Creative project by aolmio.'}</p>
+                            <p>${repo.description || 'No description provided yet.'}</p>
                         </div>
                         <div class="button-group">
-                            <a href="${repo.html_url}" class="btn btn-github" target="_blank">Code</a>
+                            <a href="${repo.html_url}" class="btn btn-code" target="_blank">View Source</a>
                             <a href="${liveLink}" class="btn btn-live" target="_blank">Live Demo</a>
                         </div>
                     `;
                     container.appendChild(card);
                 });
             } catch (error) {
-                document.getElementById('repo-container').innerHTML = 'Failed to load projects.';
+                container.innerHTML = '<p>Something went wrong. Please refresh the page.</p>';
             }
         }
 
