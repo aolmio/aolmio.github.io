@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>aolmio's Portfolio</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; max-width: 800px; margin: 40px auto; padding: 0 20px; background: #f4f4f9; }
+        .repo-card { background: white; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .repo-card h2 { margin-top: 0; color: #0366d6; }
+        .repo-card p { color: #586069; }
+        .repo-link { display: inline-block; margin-top: 10px; text-decoration: none; color: white; background: #2ea44f; padding: 8px 16px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>My Repositories</h1>
+    <div id="repo-container">Loading projects...</div>
+
+    <script>
+        // The list of repos you want to show
+        const mySelectedRepos = ['litread', 'dbread', 'oiu', 'akie', 'euid', 'xpc', 'ahdk', '7226', 'a1', 'su', '2512', 'bau'];
+        const username = 'aolmio';
+        const container = document.getElementById('repo-container');
+
+        async function fetchRepos() {
+            try {
+                const response = await fetch(`https://api.github.com/users/${username}/repos`);
+                const repos = await response.json();
+                
+                container.innerHTML = ''; // Clear loading text
+                
+                // Filter to only show the ones you requested
+                const filtered = repos.filter(repo => mySelectedRepos.includes(repo.name));
+
+                filtered.forEach(repo => {
+                    const card = document.createElement('div');
+                    card.className = 'repo-card';
+                    card.innerHTML = `
+                        <h2>${repo.name}</h2>
+                        <p>${repo.description || 'No description provided.'}</p>
+                        <a class="repo-link" href="${repo.html_url}" target="_blank">View on GitHub</a>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (error) {
+                container.innerHTML = 'Error loading repositories.';
+            }
+        }
+
+        fetchRepos();
+    </script>
+</body>
+</html>
